@@ -1,0 +1,11 @@
+express: For creating the server.
+
+body-parser: To parse incoming request bodies.
+
+cors: To handle Cross-Origin Resource Sharing (CORS).
+
+bcryptjs: For hashing passwords.
+
+jsonwebtoken: For generating JSON Web Tokens (JWT) for authentication.
+
+mongoose: For connecting to MongoDB (database).

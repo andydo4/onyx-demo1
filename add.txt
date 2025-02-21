@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="inner.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
+    />
+    <title>add - onyx</title>
+  </head>
+  <nav class="navbar">
+    <div class="logo">onyx</div>
+    <ul class="nav-links">
+      <li><a href="menu.html">home</a></li>
+      <li><a href="#">decks</a></li>
+      <li><a href="#">add</a></li>
+      <li><a href="#">browse</a></li>
+      <li><a href="#">stats</a></li>
+    </ul>
+  </nav>
+  <body style="padding-top: 80px">
+    <div class="quill-wrapper">
+      <div id="editor">
+        <h2>Demo Content</h2>
+        <p>
+          Prest build with <code>snow</code> theme, and some common formats.
+        </p>
+      </div>
+    </div>
+  </body>
+  <script>
+    const toolbarOptions = [
+    [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+
+  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+  ['blockquote', 'code-block'],
+  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+
+  //[{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+  ['link', 'image', 'video', 'formula'],
+
+];
+
+    const quill = new Quill("#editor", {
+      modules: {
+        toolbar: toolbarOptions
+      },
+      theme: "snow",
+    });
+  </script>
+</html>

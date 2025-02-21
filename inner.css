@@ -1,0 +1,190 @@
+:root {
+  --primary-color: #ffa4cc;
+  --secondary-color: #8440e5;
+  --tertiary-color: #dc42c2;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000;
+  border-radius: 27px;
+  padding: 0.75rem 2rem;
+  width: 50%;
+  z-index: 2;
+  margin: 1rem auto;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logo {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-links li {
+  margin-left: 1rem;
+}
+
+.nav-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #ffa4cc;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Outfit", sans-serif;
+  background: black;
+  color: white;
+  scroll-behavior: smooth;
+}
+
+.menu-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+
+}
+
+.menu-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.menu-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 3rem;
+    transition: color 0.3s ease;
+  }
+  
+  .menu-links a:hover {
+    //color: #ffa4cc;
+    font-size: 4rem;
+    font-weight: 600;
+  }
+
+.container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 16%;
+}
+
+/* ! ADD QUILL CSS ! */
+
+.quill-wrapper {
+  max-width: 1200px;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ql-toolbar {
+  // background-color: red;
+  max-width: 100%;
+  width: 100%;
+  border-radius: 8px 8px 0 0;
+  padding: 8px;
+  color: white;
+}
+
+.ql-container {
+  // for resizing the container
+  height: 300px !important;
+  max-width: 100%;
+  width: 100%;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Toolbar icon color */
+.ql-toolbar .ql-picker-item svg, 
+.ql-toolbar .ql-formats button svg {
+  fill: white !important; /* Change icon color */
+}
+
+/* Toolbar button text color */
+.ql-toolbar .ql-formats button {
+  color: white !important;
+}
+
+/* Change text color of dropdown items */
+.ql-toolbar .ql-picker-label, .ql-toolbar .ql-formats button {
+  color: white !important;
+}
+
+
+.ql-toolbar .ql-active {
+  color: var(--primary-color) !important;
+}
+
+.send-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.send-btn:hover {
+  background-color: var(--primary-color);
+}
+
+/* Browse Page! */
+.flashcard {
+  background-color: #222;
+  border: 1px solid var(--secondary-color);
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  width: 500px;
+  height: 400px;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.flashcard h3 {
+  margin-bottom: 0.5rem;
+}
+
+.card-front, .card-back {
+  margin-bottom: 1rem;
+}

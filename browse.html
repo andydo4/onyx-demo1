@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="inner.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+    rel="stylesheet"
+    />
+    <title>browse - onyx</title>
+</head>
+<nav class="navbar">
+    <div class="logo">onyx</div>
+    <ul class="nav-links">
+    <li><a href="menu.html">home</a></li>
+    <li><a href="decks.html">decks</a></li>
+    <li><a href="add.html">add</a></li>
+    <li><a href="browse.html">browse</a></li>
+    <li><a href="#">stats</a></li>
+    </ul>
+</nav>
+<body>
+        <div class="container" id="flashcards-container">
+
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        const container = document.getElementById('flashcards-container')
+        const userId = localStorage.getItem('userId')
+
+        if (!userId) {
+        alert("Please log in to view your flashcards.")
+        window.location.href = 'login.html'
+        return
+        }
+
+        try {
+        const flashcardsResponse = await fetch(`http://localhost:5000/api/auth/flashcards?userId=${userId}`)
+        if (!flashcardsResponse.ok) {
+            throw new Error('Failed to fetch flashcards')
+        }
+        const flashcards = await flashcardsResponse.json()
+
+        const studySetsResponse = await fetch(`http://localhost:5000/api/auth/studysets?userId=${userId}`)
+        if (!studySetsResponse.ok) {
+            throw new Error('Failed to fetch study sets')
+        }
+        const studySets = await studySetsResponse.json()
+
+        const flashcardToStudySets = {}
+        studySets.forEach(set => {
+            set.flashcards.forEach(flashcardObj => {
+                const idStr = flashcardObj.toString()
+                if (!flashcardToStudySets[idStr]) {
+                    flashcardToStudySets[idStr] = []
+                }
+                flashcardToStudySets[idStr].push(set.title)
+            })
+        })
+
+        if (flashcards.length === 0) {
+            container.innerHTML = '<h1>No flashcards found</h1>'
+            return
+        }
+
+          // rendering each flashcard
+        flashcards.forEach(card => {
+            const cardElement = document.createElement('div')
+            cardElement.classList.add('flashcard')
+
+            let studySetsHtml = ''
+            if(flashcardToStudySets[card._id.toString()]) {
+                studySetsHtml = `<div class="study-sets-info">Study sets: ${flashcardToStudySets[card._id.toString()].join(', ')}</div>`
+            }
+
+            cardElement.innerHTML = `
+            <div class="card-front">
+                <h3>Front</h3>
+                <div>${card.front}</div>
+            </div>
+            <div class="card-back">
+                <h3>Back</h3>
+                <div>${card.back}</div>
+            </div>
+            ${studySetsHtml}
+            `
+
+            // Delete button
+            const deleteButton = document.createElement('button')
+            deleteButton.textContent = 'Delete'
+            deleteButton.addEventListener('click', async () => {
+                const confirmDeletion = confirm('Are you sure you want to delete this flashcard?')
+                if (confirmDeletion) {
+                    try {
+                        const response = await fetch(`http://localhost:5000/api/auth/flashcards/${card._id}`, {
+                            method: 'DELETE'
+                        })
+                        if (!response.ok) {
+                            throw new Error('Failed to delete flashcard')
+                        }
+                        cardElement.remove()
+                        alert('Flashcard deleted successfully')
+                    } catch (error) {
+                        console.error(error)
+                        alert('Failed to delete flashcard')
+                    }
+                }
+            })
+            cardElement.appendChild(deleteButton)
+            container.appendChild(cardElement)
+        })
+
+        } catch (error) {
+        console.error(error)
+        container.innerHTML = '<h1>Failed to fetch flashcards</h1>'
+        }
+    })
+    </script>
+</body>
+</html>

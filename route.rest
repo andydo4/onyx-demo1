@@ -1,0 +1,51 @@
+GET http://localhost:5000
+
+###
+
+POST http://localhost:5000/api/auth/register 
+# successful register
+Content-Type: application/json 
+
+{
+    "username": "andy test",
+    "email": "user@email.com",
+    "password": "password123"
+}
+
+###
+
+POST http://localhost:5000/api/auth/register 
+# unsuccessful register
+Content-Type: application/json 
+
+{
+    "username": "andy test",
+    "email": "useremail.com",
+    "password": "password123"
+}
+
+###
+
+POST http://localhost:5000/api/auth/login
+# unsuccessful login
+Content-Type: application/json
+
+{
+    "email": "user@email.com",
+    "password": "password123"
+}
+
+###
+
+POST http://localhost:5000/api/flashcards
+Content-Type: application/json
+
+{
+    "question": "What is the capital of France?",
+    "answer": "Paris",
+    "userId": "67a5ae070089a9c1939e22df"
+}
+
+###
+
+GET http://localhost:5000/api/flashcards?userId=67a5ae070089a9c1939e22df

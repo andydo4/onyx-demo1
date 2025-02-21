@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="inner.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
+    />
+    <title>add - onyx</title>
+  </head>
+  <nav class="navbar">
+    <div class="logo">onyx</div>
+    <ul class="nav-links">
+      <li><a href="menu.html">home</a></li>
+      <li><a href="decks.html">decks</a></li>
+      <li><a href="add.html">add</a></li>
+      <li><a href="browse.html">browse</a></li>
+      <li><a href="#">stats</a></li>
+    </ul>
+  </nav>
+  <body style="padding-top: 80px">
+    <div class="quill-wrapper">
+
+      <!-- Editor Boxes -->
+      <div class="editor-container">
+        <h1>Front</h1>
+        <div id="editor1" class="editor">
+        </div>
+        <h1>Back</h1>
+        <div id="editor2" class="editor">
+        </div>
+      </div>
+
+      <!-- Study Set Dropdown Menu -->
+      <div style="margin-top: 20px;">
+        <label for="studySetSelect">Add to study set:</label>
+        <select id="studySetSelect">
+          <option value="">Select a Study Set</option>
+        </select>
+        <!-- Create New Study Set Button -->
+        <button id="newStudySetBtn" style="margin-left: 10px">New Study Set</button>
+      </div>
+
+      <!-- New Study Set Form (Hidden) -->
+      <div id="newStudySetForm" style="display: none; margin-top: 10px;">
+        <input type="text" id="newStudySetTitle" placeholder="Enter new study set title" />
+        <button id="createStudySetBtn">Create</button>
+      </div>
+      <button id="sendButton" class="send-btn">Create Flashcard</button>
+    </div>
+  </body>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", async () => { 
+      const toolbarOptions = [
+      [{ size: ["small", false, "large", "huge"] }],
+      ["bold", "italic", "underline", "strike"],
+      ["blockquote", "code-block"],
+      [{ script: "sub" }, { script: "super" }],
+      [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+      [{ color: [] }, { background: [] }],
+      ["link", "image", "video", "formula"],
+    ];
+
+    // Initialize Quill editors
+    const quill1 = new Quill("#editor1", {
+      modules: {
+        toolbar: toolbarOptions,
+      },
+      theme: "snow",
+    });
+
+    const quill2 = new Quill("#editor2", {
+      modules: {
+        toolbar: toolbarOptions,
+      },
+      theme: "snow",
+    });
+  
+    async function loadStudySets() {
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        alert("You must be logged in to view study sets");
+        window.location.href = "login.html";
+        return;
+      }
+      try {
+      const response = await fetch("http://localhost:5000/api/auth/studysets?userId=" + userId);
+      if (!response.ok) {
+        throw new Error("Failed to fetch study sets");
+      }
+      const studySets = await response.json();
+      const studySetSelect = document.getElementById("studySetSelect");
+      studySets.forEach((studySet) => {
+        const option = document.createElement("option");
+        option.value = studySet._id;
+        option.textContent = studySet.title;
+        studySetSelect.appendChild(option);
+      });
+      } catch (error) {
+        console.error("Error fetching study sets:", error);
+        alert("There was an error fetching study sets");
+      }
+    }
+    
+    loadStudySets();
+
+    document.getElementById("newStudySetBtn").addEventListener("click", function() {
+      const formDiv = document.getElementById("newStudySetForm");
+      formDiv.style.display = formDiv.style.display === "none" ? "block" : "none";
+    });
+
+    document.getElementById("createStudySetBtn").addEventListener("click", async () => {
+      const titleInput = document.getElementById("newStudySetTitle");
+      const title = titleInput.value.trim();
+      if (!title) {
+        alert("Please enter a title for the study set");
+        return;
+      }
+      const userId = localStorage.getItem("userId");
+      if (!userId) {
+        alert("You must be logged in to create a study set");
+        window.location.href = "login.html";
+        return;
+      }
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/studysets", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ title, flashcards: [], userId }),
+        });
+        if (!response.ok) {
+          throw new Error("Failed to create study set");
+        }
+        const newStudySet = await response.json();
+        alert("Study set created successfully!");
+
+        titleInput.value = "";
+        document.getElementById("newStudySetForm").style.display = "none";
+
+        loadStudySets();
+      } catch (error) {
+        console.error("Error creating study set:", error);
+        alert("There was an error creating your study set");
+      }
+    });
+
+    document.getElementById("sendButton").addEventListener("click", async function() {
+      const frontText = quill1.root.innerHTML
+      const backText = quill2.root.innerHTML
+
+      const userId = localStorage.getItem("userId")
+      if(!userId) {
+        alert("You must be logged in to create a flashcard")
+        window.location.href = "login.html"
+        return
+      }
+
+      const flashcard = {
+        front: frontText,
+        back: backText,
+        userId: userId
+      };
+
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/flashcards", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(flashcard)
+        })
+
+        if(!response.ok) {
+          throw new Error("Failed to create flashcard")
+          console.error("Server error:", errorData);
+          throw new Error("Failed to create flashcard");
+        }
+
+        const data = await response.json()
+        console.log("Flashcard Created: ", flashcard)
+
+        const studySetId = document.getElementById("studySetSelect").value;
+        if (studySetId) {
+          const response = await fetch(`http://localhost:5000/api/auth/studysets/${studySetId}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ flashcardId: data._id }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to add flashcard to study set");
+          }
+          alert("Flashcard created and added to study set successfully!");
+        } else {
+          alert("Flashcard created successfully!");
+        }
+
+
+        alert("Flashcard created successfully!")
+      } catch (error) {
+        console.error("Error creating flashcard:", error)
+        alert("There was an error creating your flashcard")
+      }
+    })
+  })
+  </script>
+</html>

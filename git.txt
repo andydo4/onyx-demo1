@@ -1,0 +1,8 @@
+to check if its working: git remote -v
+
+pull updates: git pull origin main
+
+to push updates:
+git add .
+git commit -m "message"
+git push origin main
