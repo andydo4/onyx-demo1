@@ -86,15 +86,22 @@
       theme: "snow",
     });
   
-    async function loadStudySets() {
-      const userId = localStorage.getItem("userId");
-      if (!userId) {
-        alert("You must be logged in to view study sets");
-        window.location.href = "/login.html";
-        return;
-      }
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+    if (!token || !userId) {
+      alert("You must be logged in to create a flashcard");
+      window.location.href = "/login.html";
+      return;
+    }
+
+    async function loadStudySets(token, userId) {
       try {
-      const response = await fetch("/api/auth/studysets?userId=" + userId);
+      const response = await fetch(`/api/auth/studysets?userId=${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch study sets");
       }
@@ -137,6 +144,7 @@
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ title, flashcards: [], userId }),
         });
@@ -178,6 +186,7 @@
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
           },
           body: JSON.stringify(flashcard)
         })
