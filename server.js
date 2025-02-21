@@ -1,15 +1,20 @@
-require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const path = require("path");
+
+require('dotenv').config();
+
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static(path.join(__dirname)));
 
 // Connect to MongoDB
 mongoose
@@ -24,8 +29,32 @@ const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
 // Routes
-app.get("/", (req, res) => {
-  res.send("Onyx Backend is running!");
+// Serve specific HTML pages for direct navigation
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "login.html"));
+});
+
+app.get("/register", (req, res) => {
+  res.sendFile(path.join(__dirname, "register.html"));
+});
+
+app.get("/menu", (req, res) => {
+  res.sendFile(path.join(__dirname, "menu.html"));
+});
+
+app.get("/decks", (req, res) => {
+  res.sendFile(path.join(__dirname, "decks.html"));
+});
+
+app.get("/browse", (req, res) => {
+  res.sendFile(path.join(__dirname, "browse.html"));
+});
+
+app.get("/add", (req, res) => {
+  res.sendFile(path.join(__dirname, "add.html"));
+});
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.listen(PORT, () => {
