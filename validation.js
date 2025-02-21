@@ -7,7 +7,7 @@ const error_message = document.getElementById('error-message')
 
 const registerUser = async (userData) => {
     try {
-        const response = await fetch('http://localhost:5000/api/auth/register', {
+        const response = await fetch('/api/auth/register', {
             method: 'POST', headers: {
                 'Content-Type': 'application/json',
             },
@@ -27,23 +27,9 @@ const registerUser = async (userData) => {
     }
 };
 
-// const userData = {
-//     username: 'testuser',
-//     email: 'test@example.com',
-//     password: 'password123',
-// };
-
-// registerUser(userData)
-//     .then((result) => {
-//         console.log('Token:', result.token);
-//     })
-//     .catch((error) => {
-//         console.error('Error:', error.message);
-//     });
-
     const loginUser = async (userData) => {
         try {
-            const response = await fetch('http://localhost:5000/api/auth/login', {
+            const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Set the Content-Type header
@@ -63,33 +49,13 @@ const registerUser = async (userData) => {
             throw error;
         }
     };
-    
-    // Example usage
-    // const loginData = {
-    //     email: 'test@example.com',
-    //     password: 'password123',
-    // };
-    
-    // loginUser(loginData)
-    //     .then((result) => {
-    //         if(result.token && result.userId) {
-    //             localStorage.setItem('token', result.token);
-    //             // decode the token to extract the user ID
-    //             const decoded = jwt_decode(result.token);
-    //             localStorage.setItem('userId', decoded.id);
-    //             window.location.href = 'menu.html'; // Redirect to menu page
-    //         }
-    //     })
-    //     .catch((error) => {
-    //         console.error('Error:', error.message);
-    //     });
 
 const createFlashcard = async () => {
     const flashcardData = {
         front: 'What is JavaScript?', back: 'a language for web dev.', userId: 'some-user-id',
     }
 
-    const response = await fetch('http://localhost:5000/api/flashcards', {
+    const response = await fetch('/api/flashcards', {
         method: 'POST', headers: {
             'Content-Type': 'application/json',
         },

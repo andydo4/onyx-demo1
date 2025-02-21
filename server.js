@@ -19,6 +19,9 @@ app.use('/styles', express.static(path.join(__dirname, 'styles.css')));
 app.use('/inner', express.static(path.join(__dirname, 'inner.css')));
 app.use('/logos', express.static(path.join(__dirname, 'logos')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/js', express.static(path.join(__dirname, 'js')));
+app.use('/validation.js', express.static(path.join(__dirname, 'validation.js')));
+
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
