@@ -6,17 +6,81 @@
         "use": "@vercel/node"
     },
     {
-        "src": "index.html",
+        "src": "*.html",
+        "use": "@vercel/static"
+    },
+    {
+        "src": "*.css",
+        "use": "@vercel/static"
+    },
+    {
+        "src": "*.js",
+        "use": "@vercel/static"
+    },
+    {
+        "src": "logos/*",
+        "use": "@vercel/static"
+    },
+    {
+        "src": "*.svg",
         "use": "@vercel/static"
     }
     ],
     "routes": [
     {
-        "src": "/api/(.*)",
+        "src": "/api/(.*)",  
         "dest": "server.js"
     },
     {
-        "src": "/(.*)",
+        "src": "/(.*)\\.css",
+        "dest": "/$1.css"
+    },
+    {
+        "src": "/(.*)\\.js",
+        "dest": "/$1.js"
+    },
+    {
+        "src": "/logos/(.*)",
+        "dest": "/logos/$1"
+    },
+    {
+        "src": "/(.*)\\.svg",
+        "dest": "/$1.svg"
+    },
+    {
+        "src": "/index",
+        "dest": "/index.html"
+    },
+    {
+        "src": "/login",
+        "dest": "/login.html"
+    },
+    {
+        "src": "/register",
+        "dest": "/register.html"
+    },
+    {
+        "src": "/menu",
+        "dest": "/menu.html"
+    },
+    {
+        "src": "/decks",
+        "dest": "/decks.html"
+    },
+    {
+        "src": "/browse",
+        "dest": "/browse.html"
+    },
+    {
+        "src": "/add",
+        "dest": "/add.html"
+    },
+    {
+        "src": "/test",
+        "dest": "/test.html"
+    },
+    {
+        "src": "/(.*)",  
         "dest": "/index.html"
     }
     ]
