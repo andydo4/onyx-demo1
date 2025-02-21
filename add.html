@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="inner.css" />
+    <link rel="stylesheet" href="/inner.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -20,10 +20,10 @@
   <nav class="navbar">
     <div class="logo">onyx</div>
     <ul class="nav-links">
-      <li><a href="menu.html">home</a></li>
-      <li><a href="decks.html">decks</a></li>
-      <li><a href="add.html">add</a></li>
-      <li><a href="browse.html">browse</a></li>
+      <li><a href="/menu.html">home</a></li>
+      <li><a href="/decks.html">decks</a></li>
+      <li><a href="/add.html">add</a></li>
+      <li><a href="/browse.html">browse</a></li>
       <li><a href="#">stats</a></li>
     </ul>
   </nav>
@@ -90,11 +90,11 @@
       const userId = localStorage.getItem("userId");
       if (!userId) {
         alert("You must be logged in to view study sets");
-        window.location.href = "login.html";
+        window.location.href = "/login.html";
         return;
       }
       try {
-      const response = await fetch("http://localhost:5000/api/auth/studysets?userId=" + userId);
+      const response = await fetch("/api/auth/studysets?userId=" + userId);
       if (!response.ok) {
         throw new Error("Failed to fetch study sets");
       }
@@ -129,11 +129,11 @@
       const userId = localStorage.getItem("userId");
       if (!userId) {
         alert("You must be logged in to create a study set");
-        window.location.href = "login.html";
+        window.location.href = "/login.html";
         return;
       }
       try {
-        const response = await fetch("http://localhost:5000/api/auth/studysets", {
+        const response = await fetch("/api/auth/studysets", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -163,7 +163,7 @@
       const userId = localStorage.getItem("userId")
       if(!userId) {
         alert("You must be logged in to create a flashcard")
-        window.location.href = "login.html"
+        window.location.href = "/login.html"
         return
       }
 
@@ -174,7 +174,7 @@
       };
 
       try {
-        const response = await fetch("http://localhost:5000/api/auth/flashcards", {
+        const response = await fetch("/api/auth/flashcards", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -193,7 +193,7 @@
 
         const studySetId = document.getElementById("studySetSelect").value;
         if (studySetId) {
-          const response = await fetch(`http://localhost:5000/api/auth/studysets/${studySetId}`, {
+          const response = await fetch(`/api/auth/studysets/${studySetId}`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",

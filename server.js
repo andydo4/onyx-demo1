@@ -28,6 +28,12 @@ mongoose
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
 
+// Serve static files explicitly from root
+app.use('/styles', express.static(path.join(__dirname, 'styles.css')));
+app.use('/inner', express.static(path.join(__dirname, 'inner.css')));
+app.use('/logos', express.static(path.join(__dirname, 'logos')));
+
+
 // Routes
 // Serve specific HTML pages for direct navigation
 app.get("/login", (req, res) => {
