@@ -15,10 +15,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.join(__dirname)));
+app.use('/styles', express.static(path.join(__dirname, 'styles.css')));
+app.use('/inner', express.static(path.join(__dirname, 'inner.css')));
+app.use('/logos', express.static(path.join(__dirname, 'logos')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // Connect to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI, {
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -27,11 +30,6 @@ mongoose
 
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);
-
-// Serve static files explicitly from root
-app.use('/styles', express.static(path.join(__dirname, 'styles.css')));
-app.use('/inner', express.static(path.join(__dirname, 'inner.css')));
-app.use('/logos', express.static(path.join(__dirname, 'logos')));
 
 
 // Routes

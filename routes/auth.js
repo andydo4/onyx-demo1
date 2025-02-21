@@ -9,7 +9,6 @@ const router = express.Router();
 
 // Register Route
 router.post('/register', async (req, res) => {
-    console.log('Request Body:', req.body);
     const {username, email, password} = req.body;
 
     try {
@@ -19,16 +18,18 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ message: 'User already exists' });
         }
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         // Create new user
-        const user = new User({ username, email, password });
-        await user.save();
+        const newUser = new User({ username, email, password: hashedPassword });
+        await newUser.save();
 
         // Generate JWT token
-        const token = jwt.sign({ id: user._id }, 'your-secret-key', { expiresIn: '1h' });
+        const token = jwt.sign({ id: newUser._id }, 'process.env.JWT_SECRET', { expiresIn: '1h' });
 
         res.status(201).json({ token });
-    } catch (err) {
-        console.error('Error in /register:', err);
+    } catch (error) {
+        console.error('Error in /register:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
