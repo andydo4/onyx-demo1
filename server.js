@@ -21,7 +21,8 @@ app.use('/logos', express.static(path.join(__dirname, 'logos')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/validation.js', express.static(path.join(__dirname, 'validation.js')));
-
+const authRoutes = require("./routes/auth");
+app.use("/api/auth", authRoutes);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
@@ -30,9 +31,6 @@ mongoose.connect(process.env.MONGODB_URI, {
   })
   .then(() => console.log("Connected to MongoDB Atlas"))
   .catch((err) => console.error("MongoDB connection error:", err));
-
-const authRoutes = require("./routes/auth");
-app.use("/api/auth", authRoutes);
 
 
 // Routes

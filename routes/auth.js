@@ -5,6 +5,21 @@ const User = require('../models/User');
 const Flashcard = require('../models/Flashcard')
 const StudySet = require('../models/StudySet')
 
+const authenticate = (req, res, next) => {
+    const token = req.headers.authorization?.split(' ')[1]
+    if (!token) {
+        return res.status(401).json({ message: 'Authentication failed' })
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        req.user = decoded;
+        next();
+    } catch (error) {
+        res.status(401).json({ message: 'Authentication failed' })
+    }
+} 
+
 const router = express.Router();
 
 // Register Route
@@ -27,7 +42,7 @@ router.post('/register', async (req, res) => {
         // Generate JWT token
         const token = jwt.sign({ id: newUser._id }, 'process.env.JWT_SECRET', { expiresIn: '1h' });
 
-        res.status(201).json({ token });
+        res.status(201).json({ token, userId: newUser._id }); // send token back
     } catch (error) {
         console.error('Error in /register:', error);
         res.status(500).json({ message: 'Server error' });
@@ -62,7 +77,7 @@ router.post('/login', async (req, res) => {
 
 console.log("Flashcard routes loaded")
 // Create Flashcard Route
-router.post('/flashcards', async (req, res) => {
+router.post('/flashcards', authenticate, async (req, res) => {
     console.log("POST /flashcards hit")
     const { front, back, userId } = req.body
     
