@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -12,8 +13,11 @@ app.use(express.urlencoded({ extended: true }));
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/onyx")
-  .then(() => console.log("Connected to MongoDB"))
+  .connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Connected to MongoDB Atlas"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
 const authRoutes = require("./routes/auth");
