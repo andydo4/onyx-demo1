@@ -20,7 +20,7 @@ const registerUser = async (userData) => {
 
         const result = await response.json();
         console.log('Registration successful:', result);
-        return result;
+        return {token: result.token, userId: result.userId};
     } catch (error) {
         console.error('Registration failed:', error);
         throw error;
@@ -43,7 +43,7 @@ const registerUser = async (userData) => {
     
             const result = await response.json();
             console.log('Login successful:', result);
-            return result;
+            return {token: result.token, userId: result.userId};
         } catch (error) {
             console.error('Login failed:', error);
             throw error;
